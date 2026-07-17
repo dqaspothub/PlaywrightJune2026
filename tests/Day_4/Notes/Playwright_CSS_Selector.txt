@@ -1,0 +1,190 @@
+ID Selector - Uses #
+
+<input id="email">
+
+Selector: #email
+
+Playwright: await page.locator('#email').fill('test@gmail.com');
+
+Class Selector - Uses .
+
+HTML:
+
+<button class="submit-btn">Submit</button>
+
+Selector:
+
+.submit-btn
+
+Playwright:
+
+await page.locator('.submit-btn').click();
+
+Tag Selector - Uses HTML tag name
+
+HTML:
+
+<button>Login</button>
+
+Selector:
+
+button
+
+Playwright:
+
+await page.locator('button').click();
+
+⚠ This may select multiple buttons.
+
+Attribute Selector - Select using attribute values.
+
+HTML:
+
+<input type="text" name="username">
+
+Selector:
+
+input[name="username"]
+
+Playwright:
+
+await page.locator('input[name="username"]').fill('admin');
+
+Multiple Attribute Selector
+
+HTML:
+
+<input type="text" name="email" placeholder="Enter Email">
+
+Selector:
+
+input[name="email"][type="text"]
+
+Playwright:
+
+await page.locator('input[name="email"][type="text"]').fill('test@gmail.com');
+
+
+Parent Child Selector
+
+HTML:
+
+<div class="login-form">
+   <input id="username">
+</div>
+
+Selector:
+
+.login-form #username
+
+Playwright:
+
+await page.locator('.login-form #username').fill('admin');
+
+
+Direct Child Selector
+
+Uses >
+
+HTML:
+
+<div class="menu">
+   <button>Login</button>
+</div>
+
+Selector:
+
+.menu > button
+
+Playwright:
+
+await page.locator('.menu > button').click();
+
+
+nth-child Selector
+
+Select element by position.
+
+HTML:
+
+<ul>
+<li>Apple</li>
+<li>Mango</li>
+<li>Orange</li>
+</ul>
+
+Selector:
+
+li:nth-child(2)
+
+Playwright:
+
+await page.locator('li:nth-child(2)').click();
+
+This selects Mango.
+
+Partial Attribute Matching
+Starts With
+
+HTML:
+
+<input id="user_123">
+
+Selector:
+
+input[id^="user"]
+
+Playwright:
+
+await page.locator('input[id^="user"]').fill('admin');
+
+Ends With
+input[id$="123"]
+Contains
+input[id*="ser"]
+
+
+Combining Selectors
+
+HTML:
+
+<input class="input-field" type="text">
+
+Selector:
+
+input.input-field
+
+Playwright:
+
+await page.locator('input.input-field').fill('test');
+
+
+| CSS Selector    | Description           | Example HTML             | Playwright Example                    |
+| --------------- | --------------------- | ------------------------ | ------------------------------------- |
+| `tag`           | Select by HTML tag    | `<button>Login</button>` | `page.locator('button')`              |
+| `#id`           | Select by ID          | `<input id="username">`  | `page.locator('#username')`           |
+| `.class`        | Select by class       | `<button class="login">` | `page.locator('.login')`              |
+| `tag.class`     | Tag with class        | `<button class="login">` | `page.locator('button.login')`        |
+| `[attr]`        | Attribute exists      | `<input required>`       | `page.locator('input[required]')`     |
+| `[attr=value]`  | Exact attribute match | `<input name="email">`   | `page.locator('input[name="email"]')` |
+| `[attr^=value]` | Attribute starts with | `<input id="user123">`   | `page.locator('input[id^="user"]')`   |
+| `[attr$=value]` | Attribute ends with   | `<input id="test123">`   | `page.locator('input[id$="123"]')`    |
+| `[attr*=value]` | Attribute contains    | `<input id="myuser123">` | `page.locator('input[id*="user"]')`   |
+
+| CSS Selector     | Meaning                 | Example         |
+| ---------------- | ----------------------- | --------------- |
+| `parent child`   | Any child inside parent | `.form input`   |
+| `parent > child` | Direct child            | `.form > input` |
+
+| Selector        | Meaning             | Example           |
+| --------------- | ------------------- | ----------------- |
+| `:first-child`  | First child element | `li:first-child`  |
+| `:last-child`   | Last child element  | `li:last-child`   |
+| `:nth-child(n)` | Specific position   | `li:nth-child(2)` |
+
+
+| Selector | Meaning       | Example          |
+| -------- | ------------- | ---------------- |
+| `A, B`   | Select A or B | `button, input`  |
+| `A B`    | B inside A    | `.menu button`   |
+| `A > B`  | Direct child  | `.menu > button` |

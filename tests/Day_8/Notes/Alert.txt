@@ -1,0 +1,153 @@
+What is an Alert?
+
+An alert is a browser popup triggered by JavaScript.
+
+Types of alerts:
+
+Simple Alert → OK button only
+
+Confirm Alert → OK + Cancel
+
+Prompt Alert → Input box + OK/Cancel
+
+
+import { test, expect } from '@playwright/test';
+
+test('Handle Simple Alert', async ({ page }) => {
+
+  await page.goto('https://testautomationpractice.blogspot.com/');
+
+  // Listen to alert
+  page.on('dialog', async (dialog) => {
+    console.log('Alert message:', dialog.message());
+    await dialog.accept(); // Click OK
+  });
+
+  // Click button that triggers alert
+  await page.click('#alertBtn');
+
+});
+
+test('Handle Confirm Alert - Cancel', async ({ page }) => {
+
+  await page.goto('https://testautomationpractice.blogspot.com/');
+
+  page.on('dialog', async (dialog) => {
+    console.log(dialog.message());
+    await dialog.dismiss(); // Click Cancel
+  });
+
+  await page.click('#confirmBtn');
+
+});
+
+test('Handle Prompt Alert', async ({ page }) => {
+
+  await page.goto('https://testautomationpractice.blogspot.com/');
+
+  page.on('dialog', async (dialog) => {
+    console.log(dialog.message());
+    await dialog.accept('Kannathasan'); // Enter text + OK
+  });
+
+  await page.click('#promptBtn');
+
+});
+
+Must handle alert before action finishes
+
+If you don’t handle it: Playwright will auto-dismiss the alert
+✔ Always register dialog handler before clicking
+✔ Use page.once() for single alerts
+✔ Use assertions to validate alert text
+✔ Avoid multiple listeners unless needed
+
+dialog.message() → Get alert text
+dialog.accept() → Click OK
+dialog.dismiss() → Click Cancel
+dialog.accept("text") → Enter value (for prompt)
+
+async function handleAlert(page, action: 'accept' | 'dismiss', value?: string) {
+  page.once('dialog', async (dialog) => {
+    console.log(dialog.message());
+
+    if (action === 'accept') {
+      await dialog.accept(value);
+    } else {
+      await dialog.dismiss();
+    }
+  });
+}
+
+await handleAlert(page, 'accept', 'Hello');
+await page.click('#promptBtn');
+
+
+page.on() will handle ALL alerts
+
+🔁 Behavior:
+Alert 1 → handled ✅
+Alert 2 → handled ✅
+Alert 3 → handled ✅
+
+Run this code only for the first alert, then stop listening”
+
+page.on('dialog', async (dialog) => {
+  console.log('Handling alert');
+  await dialog.accept();
+});
+
+await page.click('#alertBtn1');
+await page.click('#alertBtn2');
+
+🔁 Behavior:
+Alert 1 → handled ✅
+Alert 2 → ❌ NOT handled
+Alert 3 → ❌ NOT handled
+
+page.once('dialog', async (dialog) => {
+  console.log('Handling alert');
+  await dialog.accept();
+});
+
+await page.click('#alertBtn1');
+await page.click('#alertBtn2');
+
+test('Handle Confirm Alert - Cancel', async ({ page }) => {
+
+  await page.goto('https://testautomationpractice.blogspot.com/');
+
+  page.on('dialog', async (dialog) => {
+    console.log(dialog.message());
+    await dialog.dismiss(); // Click Cancel
+  });
+
+  await page.click('#confirmBtn');
+
+});
+
+test('Handle Prompt Alert', async ({ page }) => {
+
+  await page.goto('https://testautomationpractice.blogspot.com/');
+
+  page.on('dialog', async (dialog) => {
+    console.log(dialog.message());
+    await dialog.accept('Kannathasan'); // Enter text + OK
+  });
+
+  await page.click('#promptBtn');
+
+});
+
+test('SweetAlert Example', async ({ page }) => {
+
+  await page.goto('https://letcode.in/alert');
+
+  await page.locator("#modern").click;
+
+  // Validate message
+
+  // Click OK
+await page.locator(".modal-close.is-large").click;
+
+});

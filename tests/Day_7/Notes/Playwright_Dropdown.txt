@@ -1,0 +1,126 @@
+There are mainly 2 common types:
+
+HTML <select> dropdown (standard dropdown)
+Custom dropdown (div/span based UI dropdown)
+
+Handling Standard <select> Dropdown
+
+If the dropdown is created using the HTML <select> tag, Playwright provides a built-in method:
+
+selectOption()
+Example HTML
+<select id="country">
+  <option value="IN">India</option>
+  <option value="US">United States</option>
+  <option value="UK">United Kingdom</option>
+</select>
+
+Different Ways to Select Dropdown Values
+
+1️.Select by Value
+
+await page.locator('#country').selectOption('US');
+or
+await page.selectOption('#country', 'US');
+
+2️.Select by Visible Text (Label)
+
+await page.locator('#country').selectOption({ label: 'India' });
+
+3️.Select by Index
+
+await page.locator('#country').selectOption({ index: 2 });
+
+Index starts from 0
+
+0 → India
+1 → United States
+2 → United Kingdom
+
+4️.Select Multiple Options (Multi-select dropdown)
+
+HTML:
+
+<select id="skills" multiple>
+  <option value="java">Java</option>
+  <option value="python">Python</option>
+  <option value="js">JavaScript</option>
+</select>
+
+Playwright: await page.locator('#skills').selectOption(['java', 'js']);
+
+
+----Handling Custom Dropdown (Non-Select Dropdown)-----
+
+Modern UI frameworks (React, Angular, Material UI) use custom dropdowns built with <div> or <span>.
+
+Example:
+
+<div class="dropdown">
+   <div class="selected">Select Country</div>
+   <div class="options">
+      <div>India</div>
+      <div>USA</div>
+      <div>UK</div>
+   </div>
+</div>
+
+In this case selectOption() will NOT work.
+
+Instead we:
+
+1️.Click dropdown
+2️.Click option
+
+Playwright Script
+test('Custom dropdown', async ({ page }) => {
+
+  await page.goto('https://example.com');
+
+  // Click dropdown
+  await page.locator('.dropdown').click();
+
+  // Click option
+  await page.getByText('India').click();
+
+});
+
+
+---Capture All Dropdown Options----
+
+Sometimes we need to print all dropdown values.
+
+Example:
+
+const options = await page.locator('#country option').allTextContents();
+
+console.log(options);
+
+Output
+
+[ 'India', 'United States', 'United Kingdom' ]
+
+----Verify Selected Dropdown Value----
+
+await page.locator('#country').selectOption('IN');
+
+const selected = await page.locator('#country').inputValue();
+
+console.log(selected);
+
+---- Wait for Dropdown Option -----
+
+If dropdown loads dynamically:
+
+await page.locator('#country').waitFor();
+
+await page.locator('#country').selectOption('IN');
+
+| Scenario        | Playwright Code                       |
+| --------------- | ------------------------------------- |
+| Select by value | `selectOption('IN')`                  |
+| Select by text  | `selectOption({label:'India'})`       |
+| Select by index | `selectOption({index:1})`             |
+| Multi select    | `selectOption(['java','js'])`         |
+| Custom dropdown | `click() → click option`              |
+| Get all options | `locator('option').allTextContents()` |
