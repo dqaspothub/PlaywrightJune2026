@@ -1,0 +1,72 @@
+What are Hooks?
+
+Hooks are functions that run:
+
+Before tests
+After tests
+Before each test
+After each test
+
+They help you handle:
+
+Test setup (login, open URL, test data creation)
+
+Test cleanup (logout, delete data, close resources)
+
+Types of Hooks in Playwright
+
+Playwright provides 4 main hooks:
+
+1. test.beforeAll()
+
+➡ Runs once before all tests in a file
+
+2. test.afterAll()
+
+➡ Runs once after all tests are completed
+
+3. test.beforeEach()
+
+➡ Runs before every test
+
+4. test.afterEach()
+
+➡ Runs after every test
+
+beforeAll (once)
+
+beforeEach → Test1 → afterEach
+beforeEach → Test2 → afterEach
+
+afterAll (once)
+-----------------------------------
+
+Hooks Inside test.describe()
+
+You can scope hooks inside a test group:
+
+test.describe('Login Tests', () => {
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto('https://example.com/login');
+  });
+
+  test('Valid Login', async ({ page }) => {
+    // test logic
+  });
+
+  test('Invalid Login', async ({ page }) => {
+    // test logic
+  });
+  
+
+});
+
+👉 These hooks will only apply to tests inside that describe block.
+
+| Hook       | Runs When             | Use Case              |
+| ---------- | --------------------- | --------------------- |
+| beforeAll  | Once before all tests | Setup, login, DB      |
+| afterAll   | Once after all tests  | Cleanup               |
+| beforeEach | Before every test     | Open URL, reset state |
+| afterEach  | After every test      | Screenshot, logs      |

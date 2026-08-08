@@ -1,0 +1,115 @@
+
+# What is an iFrame?
+
+* An **iframe** is a web page embedded inside another web page
+* You **cannot directly interact** with elements inside it
+* You must switch context to the frame
+
+---
+
+# 🔥 Most Used Methods (Focus Area)
+
+## ✅ 1. `frameLocator()`
+
+### ✔ Why use?
+
+* Auto-waiting
+* No null issues
+* Clean & stable
+
+---
+
+## ✅ 2. Nested iFrames
+
+👉 iframe inside iframe
+
+await page
+  .frameLocator("frame[src='frame_3.html']")
+  .frameLocator("iframe")
+  .locator("#checkbox")
+  .check();
+
+---
+
+## ✅ 3. `page.frame()` (Old but still asked in interviews)
+
+const frame = await page.frame({ url: /frame_1/ });
+
+if (frame) {
+  await frame.fill("#input", "Hello");
+}
+
+### ⚠️ Notes:
+
+* Returns `Frame | null`
+* Needs null check
+
+---
+
+## ✅ 4. `page.frames()`
+
+👉 Get all frames
+
+const frames = page.frames();
+
+for (const f of frames) {
+  console.log(f.url());
+}
+
+## ✅ 5. `frame.childFrames()`
+
+👉 Get nested frames
+
+const parent = await page.frame({ url: /frame_3/ });
+const children = parent?.childFrames();
+
+### ⚠️ Avoid using index like `[0]` in real tests
+
+---
+
+#Best Practices (Very Important)
+
+### ✅ Always Prefer:
+
+✔ `frameLocator()`
+✔ Chained locators
+
+---
+
+Q1: Best way to handle iframe? `frameLocator()`
+
+Q2: Difference between `frame()` and `frameLocator()`?
+
+| Feature     | frame()      | frameLocator() |
+| ----------- | ------------ | -------------- |
+| Return      | Frame / null | Locator        |
+| Auto-wait   | ❌            | ✅              |
+| Stability   | ⚠️           | ✅              |
+| Recommended | ❌            | ✅              |
+
+Q3: How to handle nested iframe?
+
+👉 Use chaining:
+
+frameLocator().frameLocator()
+
+Q4: Why avoid `childFrames()`?
+
+👉 Index-based → unstable
+
+# 🧾 Cheat Sheet (Quick Revision)
+
+// Best
+page.frameLocator('iframe').locator('#id').click();
+
+// Nested
+page.frameLocator('#f1').frameLocator('#f2').locator('#btn').click();
+
+// Old
+const frame = await page.frame({ url: /abc/ });
+
+// All frames
+page.frames();
+
+// Child frames
+frame.childFrames();

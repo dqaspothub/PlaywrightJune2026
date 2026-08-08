@@ -1,0 +1,22 @@
+| Annotation   | Use Case                         |
+| ------------ | -------------------------------- |
+| `skip`       | Feature not supported in browser |
+| `only`       | Debugging specific test          |
+| `fail`       | Known bug (temporary)            |
+| `fixme`      | Feature not ready                |
+| `slow`       | Heavy API / dashboard            |
+| `setTimeout` | Long-running test                |
+| Tags         | Smoke / Regression filtering     |
+
+test.skip(): Ignores the test entirely. Useful for features under construction.
+
+test.fail(): Tells Playwright that this test should fail. If it actually passes, Playwright will throw an error (to let you know a bug was fixed!).
+
+test.fixme(): Similar to skip, but specifically implies the test is broken and needs fixing.
+
+test.slow(): Triples the default timeout for a specific test.
+
+test.only(): Runs only this specific test (great for debugging).
+
+
+https://playwright.dev/docs/test-annotations

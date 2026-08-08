@@ -15,7 +15,7 @@ test('Verify multi dropdown ', async ({page}) => {
   await page.waitForTimeout(2000);
 
   // Step 3: Select by index (4th option = index 3, zero-based)
-  await heroMultiDropdown.selectOption(['Ant-Man','The Avengers']);
+  await heroMultiDropdown.selectOption([{ value: 'Ant-Man' },{ value: 'The Avengers' }]);
 
   await page.waitForTimeout(2000);
 

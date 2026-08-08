@@ -4,7 +4,11 @@ test('Handle Simple Alert', async ({ page }) => {
 
   await page.goto('https://testautomationpractice.blogspot.com/');
 
-   handleAlert(page,'accept');
+
+  page.on('dialog', async (dialog) => {
+    console.log(dialog.message());
+    await dialog.accept(); // Click OK
+  });
 
   // Click button that triggers alert
   await page.click('#alertBtn');
@@ -43,6 +47,7 @@ test('SweetAlert Example', async ({ page }) => {
 
   await page.locator("#modern").click;
 
-  await page.locator(".modal-close.is-large").click;
+  await page.locator("button[aria-label='close']").click;
 
 });
+
